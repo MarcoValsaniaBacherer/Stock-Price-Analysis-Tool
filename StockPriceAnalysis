@@ -1,0 +1,191 @@
+#This code offers basic analytical tools for understanding stock price fluctuations and retrospectively analysing best investment strategies. The options Menu can be accessed by typing main(). 
+
+import random
+
+def menu():
+    """Prints the menu of options that the user can choose."""
+    print()
+    print("(0) Enter a new list")
+    print("(1) Continue (and re-print)!")
+    print("(2) Generate the next element")
+    print("(3) Find the standard deviation of the stock price")
+    print("(4) Find the maximum stock price and its day")
+    print("(5) Find the minimum stock price and its day")
+    print("(6) Best investment plan")
+    print("(9) Break! (quit)")
+    print()
+    print("Enter your own choice:")
+    print()
+
+def generate(L):
+    """Predict ignores its argument and returns
+       what the stock price would be for the following day
+    """
+    return random.choice(range(43))
+
+def find_min(L):
+    """find min uses a loop to return the minimum of L.
+       Argument L: a nonempty list of numbers.
+       Return value: the smallest value in L.
+    """
+    result = L[0]
+    for x in L:
+        if x < result:    
+            result = x
+    return result
+
+def find_min_loc(L):
+    """find min loc uses a loop to return the minimum of L
+            and the location (index or day) of that minimum.
+        Argument L: a nonempty list of numbers.
+        Results:  the smallest value in L, its location (index)
+    """
+    minval = L[0]
+    minloc = 0
+
+    for i in list(range(len(L))):
+        if L[i] < minval:  
+            minval = L[i]
+            minloc = i
+
+    return minval, minloc
+
+def find_max_loc(L):
+    """find max loc uses a loop to return the maximum value of L
+            and the location (index or day) of that maximum.
+        Argument L: a nonempty list of numbers.
+        Results:  the smallest value in L, its location (index)
+    """
+    maxval = L[0]
+    maxloc = 0
+
+    for i in list(range(len(L))):
+        if L[i] > maxval:  
+            maxval = L[i]
+            maxloc = i
+
+    return maxval, maxloc
+
+import math
+
+
+def profit (L):
+
+    Alpha = 0
+    Sell = 0
+    Buy = 0
+
+    for b in range (len(L)):
+        for s in range(b, len(L)):
+            if L[s] - L[b] >= Alpha:
+                Alpha = L[s] - L[b]
+                Sell = s
+                Buy = b
+            print("b:", b, "s:", s)
+    
+    print ("maximum profit:", Alpha)
+    print ("Day to buy on:", Buy )
+    print ("Value on that day:", L[Buy])
+    print ("Day to sell on:", Sell )
+    print ("Value on that day:", L[Sell])
+
+
+
+
+def main():
+    """The main user-interaction loop."""
+    secret_value = 4.2
+
+    L = [30, 10, 20]  # an initial list
+
+    while True:       # The user-interaction loop
+        print("\n\nThe list of Stock Prices is", L)
+        menu()
+        choice = input("Choose an option: ")
+
+        
+        # "Cleaning and checking" the user's input
+        
+        try:
+            choice = int(choice)   
+        except:
+            print("I didn't understand your input! Continuing...")
+            continue
+
+        
+        # Running the appropriate menu option
+        
+        if choice == 9:    # We want to quit
+            break          # Leaves the while loop altogether
+
+        elif choice == 1:  # We want to continue (and print) ...
+            print("Continuing...")
+            continue       # Goes back to the top of the while loop,
+                           # ..where it will print L
+
+        elif choice == 0:  # We want to enter a new list of stock prices
+            newL = input("Enter a new list: ")    
+ 
+            try: 
+                newL = eval(newL)
+                if type(newL) != type([]): 
+                    print("That didn't seem like a list. Not changing L.")
+                else: 
+                    L = newL  
+            except:
+                print("I didn't understand your input. Not changing L.")
+
+        elif choice == 2:  # Generate and add the next element
+            n = generate(L) # Get the next element from the generate function
+            print("The next element is", n)
+            print("Adding it to your list...")
+            L = L + [n]    
+             
+
+        elif choice == 3:  #Standard deviation of Stock
+            pass           
+            Lav = (sum(L)/len(L)) 
+            sumation = 0 
+            for x in L :
+                sumation = sumation + (x - Lav)**2 
+
+            A = math.sqrt(sumation/len(L))
+            print(A)
+
+        elif choice == 4:  # Maximum stock price and day
+            maxval, maxloc = find_max_loc(L)
+            print("The maximum value in L is", maxval, "at day #", maxloc)
+            
+
+        elif choice == 5:  # Minimum stock price and day
+            minval, minloc = find_min_loc(L)
+            print("The minimum value in L is", minval, "at day #", minloc)
+            
+        elif choice == 6: # Restrospectively looking at the best investment strategy
+
+            Alpha = 0
+            Order1 = 0
+            Order2 = 0
+
+            for b in range (len(L)):
+                for s in range(b, len(L)):
+                    if L[s] - L[b] >= Alpha:
+                        Alpha = L[s] - L[b]
+                        Order1 = s
+                        Order2 = b
+                    
+            
+            print ("Day to buy on:", Order2 )
+            print ("Value on that day:", L[Order2])
+            print ("Day to sell on:", Order1 )
+            print ("Value on that day:", L[Order1])
+            print()
+            print ("total profit:", Alpha)
+            
+        else:
+            print(choice, " ?      That's not on the menu!")
+             
+    print()
+    print("Have a good day!")
+
+
